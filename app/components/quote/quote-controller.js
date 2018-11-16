@@ -1,6 +1,6 @@
 import QuoteService from "./quote-service.js";
 
-let qs = new QuoteService
+let qs = new QuoteService()
 
 
 export default class QuoteController {
@@ -10,7 +10,9 @@ export default class QuoteController {
 
 	getQuote() {
 		qs.getQuote(function (quote) {
-			console.log('What is the quote', quote)
+			document.getElementById("quote").innerHTML = `
+			<span>"${quote.quote}"  
+			<em>author</em>- ${quote.author}</span>`
 		})
 	}
 }

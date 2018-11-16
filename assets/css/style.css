@@ -1,0 +1,13 @@
+body{
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  color: whitesmoke;
+  text-shadow: 2px 2px #00041b;
+}
+
+.quote{
+  font-size: 112.5%;
+  font-weight: 300;
+}
