@@ -11,8 +11,8 @@ export default class QuoteController {
 	getQuote() {
 		qs.getQuote(function (quote) {
 			document.getElementById("quote").innerHTML = `
-			<span>"${quote.quote}"  
-			<em>author</em>- ${quote.author}</span>`
+			<span>"${quote.quote.body}"  
+			<em>author</em>- ${quote.quote.author}</span>`
 		})
 	}
 }

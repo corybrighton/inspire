@@ -1,7 +1,6 @@
 import ImageService from "./image-service.js";
 
 function drawBackground(image) {
-  console.log(image)
   document.body.style.backgroundImage = `url('${image.url}')`
 }
 

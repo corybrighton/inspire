@@ -1,62 +1,57 @@
 import TodoService from "./todo-service.js";
 
-
-
-var todoService = new TodoService
+var ts = new TodoService
 
 // Use this getTodos function as your callback for all other edits
 function getTodos() {
 	//FYI DONT EDIT ME :)
-	todoService.getTodos(draw)
+	ts.getTodos(draw)
 }
 
 function draw(todos) {
-	//WHAT IS MY PURPOSE?
-	//BUILD YOUR TODO TEMPLATE HERE
-	var template = ''
-	//DONT FORGET TO LOOP
+
+	let template = ''
+	let count = 0
+	todos.data.forEach(todo => {
+		template += `
+		<input type="checkbox" name="${todo.description}" onchange="app.controllers.todoCtrl.toggleTodoStatus('${todo._id}')"`
+		template += (todo.completed) ? `checked><strike>${todo.description}</strike>` : `>${todo.description}`
+		template += `<i class="fas fa-eraser" onclick="app.controllers.todoCtrl.removeTodo('${todo._id}')"></i><br>
+		`
+		if (!todo.completed) { count++ }
+	});
+	let top = `
+	<div class="pl-4">
+				Todo List - ${count}
+				<form onsubmit="app.controllers.todoCtrl.addTodoFromForm(event)">`
+	template += `
+					<input type="text" name="newTodo">
+				</form>
+			</div>`
+	document.getElementById('todo').innerHTML = top + template
 }
 
 
 export default class TodoController {
-	constructor() {
-		// IF YOU WANT YOUR TODO LIST TO DRAW WHEN THE PAGE FIRST LOADS WHAT SHOULD YOU CALL HERE???
-	}
-	// You will need four methods
-	// getTodos should request your api/todos and give an array of todos to your callback fn
-	// addTodo takes in a todo and posts it to the server
-	// toggleTodoStatus takes in a todo marks its status as completed and puts it to the server
-	// removeTodo takes in a todoId and sends a delete request to the server
-	// **** HINT: Everytime you make a change to any todo don't forget to get the todo list again
 
+	addTodo() {
+		ts.getTodos(draw)
+	}
 
 	addTodoFromForm(e) {
-		e.preventDefault() // <-- hey this time its a freebie don't forget this
-		// TAKE THE INFORMATION FORM THE FORM
+		e.preventDefault()
 		var form = e.target
 		var todo = {
-			// DONT FORGET TO BUILD YOUR TODO OBJECT
+			description: form.newTodo.value
 		}
-
-		//PASSES THE NEW TODO TO YOUR SERVICE
-		//DON'T FORGET TO REDRAW THE SCREEN WITH THE NEW TODO
-		//YOU SHOULDN'T NEED TO CHANGE THIS
-		todoService.addTodo(todo, getTodos)
-		//^^^^^^^ EXAMPLE OF HOW TO GET YOUR TOODOS AFTER AN EDIT
+		ts.addTodo(todo, getTodos)
 	}
 
 	toggleTodoStatus(todoId) {
-		// asks the service to edit the todo status
-		todoService.toggleTodoStatus(todoId, getTodos)
-		// YEP THATS IT FOR ME
+		ts.toggleTodoStatus(todoId, getTodos)
 	}
 
 	removeTodo(todoId) {
-		// ask the service to run the remove todo with this id
-
-		// ^^^^ THIS LINE OF CODE PROBABLY LOOKS VERY SIMILAR TO THE toggleTodoStatus
+		ts.removeTodo(todoId, draw)
 	}
-
-
-
 }

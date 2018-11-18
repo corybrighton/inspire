@@ -11,7 +11,6 @@ const weatherApi = axios.create({
 export default class WeatherService {
 
 	getWeather(callWhenDone) {
-		console.log('Calling the Weatherman')
 		weatherApi().then(function (res) {
 			// HEY FUN FACT 
 			// Have you ever wanted to know the temperature measured in kelvin? That is what this data returns!

@@ -13,12 +13,11 @@ export default class WeatherController {
 
 	getWeather() {
 		ws.getWeather(weather => {
-			console.log(weather);
 			document.getElementById('weather').innerHTML = `
-			<div class="weather-text">${weather.weather[0].description}</div>
-			<div class="weather-text">${convert(weather.main.temp)}</div>
+			<div class="weather-text">
+			<img src="http://openweathermap.org/img/w/${weather.weather[0].icon}.png">
+			${convert(weather.main.temp)}</div>
 			<div class="weather-text">High:${convert(weather.main.temp_max)}</div>
-			<div class="weather-text">Low:${convert(weather.main.temp_min)}</div>
 			<div class="weather-text">${weather.name}</div>
 			`
 		})

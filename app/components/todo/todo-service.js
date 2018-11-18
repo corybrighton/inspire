@@ -1,3 +1,4 @@
+import Todo from "../../models/todos.js";
 
 
 // @ts-ignore
@@ -12,44 +13,50 @@ function logError(e) {
 
 
 let todoList = []
+let todoCount = todoList.length + 1
+function gettodoCount() {
+	let count = 0
+	todoList.forEach(todo => {
+		if (todo.completed) { count++ }
+	});
+	return todoCount - count
+}
 
 export default class TodoService {
 
 	getTodos(draw) {
-		console.log("Getting the Todo List")
 		todoApi.get('')
-			.then((res) => { // <-- WHY IS THIS IMPORTANT????
-
+			.then((res) => {
+				todoList = res.data.data.map(todo => new Todo(todo))
+				draw(res.data)
 			})
 			.catch(logError)
 	}
 
-	addTodo(todo) {
-		// WHAT IS THIS FOR???
+	addTodo(todo, draw) {
 		todoApi.post('', todo)
-			.then(function (res) { // <-- WHAT DO YOU DO AFTER CREATING A NEW TODO?
-
+			.then(function (res) {
+				draw()
 			})
 			.catch(logError)
 	}
 
-	toggleTodoStatus(todoId) {
-		// MAKE SURE WE THINK THIS ONE THROUGH
-		//STEP 1: Find the todo by its index **HINT** todoList
-
-		var todo = {} ///MODIFY THIS LINE
-
-		//STEP 2: Change the completed flag to the opposite of what is is **HINT** todo.completed = !todo.completed
+	toggleTodoStatus(todoId, draw) {
+		var todo = todoList.find(todo => todo._id == todoId)
+		todo.completed = !todo.completed
 		todoApi.put(todoId, todo)
 			.then(function (res) {
-				//DO YOU WANT TO DO ANYTHING WITH THIS?
+				draw()
 			})
 			.catch(logError)
 	}
 
-	removeTodo() {
-		// Umm this one is on you to write.... The method is a DELETE
-
+	removeTodo(todoId, draw) {
+		todoApi.delete(todoId)
+			.then(res => {
+				this.getTodos(draw)
+			})
+			.catch(logError)
 	}
 
 }
